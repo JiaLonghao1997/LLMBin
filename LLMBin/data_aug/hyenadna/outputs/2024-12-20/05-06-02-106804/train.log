@@ -1,0 +1,7 @@
+[2024-12-20 05:06:02,465][__main__][INFO] - Instantiating callback <src.callbacks.timer.Timer>
+[2024-12-20 05:06:02,470][__main__][INFO] - Instantiating callback <src.callbacks.params.ParamsLog>
+[2024-12-20 05:06:02,480][__main__][INFO] - Instantiating callback <pytorch_lightning.callbacks.ModelCheckpoint>
+[2024-12-20 05:06:02,482][__main__][INFO] - Instantiating trainer <pytorch_lightning.Trainer>
+[2024-12-20 05:07:10,206][hydra.utils][ERROR] - Error getting callable at src.models.sequence.long_conv_lm.ConvLMHeadModel : Error loading 'src.models.sequence.long_conv_lm.ConvLMHeadModel':
+ModuleNotFoundError("No module named 'flash_attn'")
+Are you sure that 'long_conv_lm' is importable from module 'src.models.sequence'?

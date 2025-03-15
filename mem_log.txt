@@ -1,0 +1,1 @@
+BERTBin_HyenaDNA+20kb: batch_size=4时，内存消耗为14058MiB。

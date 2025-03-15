@@ -1,0 +1,144 @@
+train:
+  seed: 2222
+  interval: step
+  monitor: test/loss
+  mode: min
+  ema: 0.0
+  test: false
+  debug: false
+  ignore_warnings: false
+  state:
+    mode: null
+    n_context: 0
+    n_context_eval: ${.n_context}
+  ckpt: null
+  disable_dataset: false
+  validate_at_start: false
+  pretrained_model_path: null
+  pretrained_model_strict_load: true
+  pretrained_model_state_hook:
+    _name_: null
+  post_init_hook:
+    _name_: null
+  layer_decay:
+    _name_: null
+    decay: 0.7
+  gpu_mem: ${eval:"round(float(__import__('subprocess').check_output('nvidia-smi -i
+    0 --query-gpu=memory.total --format=csv,noheader,nounits', shell=True).strip().decode())
+    / 1000)"}
+  global_batch_size: 256
+tolerance:
+  logdir: ./resume
+  id: null
+wandb: null
+trainer:
+  _target_: pytorch_lightning.Trainer
+  devices: 1
+  accelerator: gpu
+  accumulate_grad_batches: ${div_up:${train.global_batch_size}, ${eval:${trainer.devices}
+    * ${dataset.batch_size} * ${trainer.num_nodes}}}
+  max_epochs: 100
+  gradient_clip_val: 1.0
+  log_every_n_steps: 10
+  limit_train_batches: 1.0
+  limit_val_batches: 1.0
+  num_nodes: 1
+  precision: 16
+loader:
+  batch_size: 50
+  num_workers: 4
+  pin_memory: true
+  drop_last: true
+dataset:
+  _name_: hg38
+  bed_file: null
+  fasta_file: null
+  dataset_name: hg38
+  tokenizer_name: char
+  cache_dir: null
+  max_length: 1024
+  add_eos: true
+  batch_size: 256
+  batch_size_eval: ${eval:${.batch_size} * 2}
+  num_workers: 12
+  shuffle: true
+  pin_memory: true
+  __train_len: ${div_up:1_000_000_000, ${.max_length}}
+  __l_max: ${.max_length}
+  max_length_val: ${dataset.max_length}
+  max_length_test: ${dataset.max_length}
+  pad_max_length: null
+  rc_aug: false
+  use_fixed_len_val: false
+  replace_N_token: false
+  pad_interval: false
+optimizer:
+  _name_: adamw
+  lr: 0.0006
+  weight_decay: 0.1
+  betas:
+  - 0.9
+  - 0.999
+scheduler:
+  _name_: cosine_warmup_timm
+  t_in_epochs: false
+  t_initial: ${eval:${div_up:${dataset.__train_len}, ${train.global_batch_size}} *
+    ${trainer.max_epochs}}
+  lr_min: ${eval:0.1 * ${optimizer.lr}}
+  warmup_lr_init: 1.0e-06
+  warmup_t: ${eval:${div_up:${dataset.__train_len}, ${train.global_batch_size}} *
+    ${trainer.max_epochs} * 0.01}
+callbacks:
+  learning_rate_monitor:
+    logging_interval: ${train.interval}
+  timer:
+    step: true
+    inter_step: false
+    epoch: true
+    val: true
+  params:
+    total: true
+    trainable: true
+    fixed: true
+  model_checkpoint:
+    monitor: ${train.monitor}
+    mode: ${train.mode}
+    save_top_k: 1
+    save_last: true
+    dirpath: checkpoints/
+    filename: ${train.monitor}
+    auto_insert_metric_name: false
+    verbose: true
+task:
+  _name_: lm
+  loss: cross_entropy
+  torchmetrics:
+  - perplexity
+  - num_tokens
+encoder: null
+decoder: null
+model:
+  _name_: lm
+  d_model: 128
+  n_layer: 2
+  d_inner: ${eval:4 * ${.d_model}}
+  vocab_size: 12
+  resid_dropout: 0.0
+  embed_dropout: 0.1
+  fused_mlp: false
+  fused_dropout_add_ln: false
+  checkpoint_mixer: false
+  checkpoint_mlp: false
+  residual_in_fp32: true
+  pad_vocab_size_multiple: 8
+  layer:
+    _name_: hyena
+    emb_dim: 5
+    filter_order: 64
+    short_filter_order: 3
+    l_max: ${eval:${dataset.max_length}+2}
+    modulate: true
+    w: 10
+    lr: ${optimizer.lr}
+    wd: 0.0
+    lr_pos_emb: 0.0

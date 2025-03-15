@@ -1,0 +1,12 @@
+hnswlib
+igraph
+joblib
+leidenalg
+networkx
+numba
+pandas
+scanpy
+scikit-learn
+seaborn
+statsmodels
+pyyaml

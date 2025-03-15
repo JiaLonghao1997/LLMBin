@@ -1,0 +1,6 @@
+[2024-12-20 05:46:01,157][__main__][INFO] - Instantiating callback <src.callbacks.timer.Timer>
+[2024-12-20 05:46:01,184][__main__][INFO] - Instantiating callback <src.callbacks.params.ParamsLog>
+[2024-12-20 05:46:01,186][__main__][INFO] - Instantiating callback <pytorch_lightning.callbacks.ModelCheckpoint>
+[2024-12-20 05:46:01,188][__main__][INFO] - Instantiating trainer <pytorch_lightning.Trainer>
+[2024-12-20 05:46:30,521][__main__][INFO] - Optimizer group 0 | 33 tensors | lr 0.0006 | weight_decay 0.1
+[2024-12-20 05:46:30,521][__main__][INFO] - Optimizer group 1 | 16 tensors | lr 0.0006 | weight_decay 0.0

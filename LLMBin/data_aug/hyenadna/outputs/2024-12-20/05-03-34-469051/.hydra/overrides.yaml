@@ -1,0 +1,11 @@
+- wandb=null
+- experiment=hg38/hg38_hyena
+- model.d_model=128
+- model.n_layer=2
+- dataset.batch_size=256
+- train.global_batch_size=256
+- dataset.max_length=1024
+- optimizer.lr=6e-4
+- trainer.devices=1
+- dataset.bed_file=/home1/jialh/metaHiC/LLMs/hyena-dna/data/hg38/human-sequences.bed
+- dataset.fasta_file=/home1/jialh/metaHiC/LLMs/hyena-dna/data/hg38/hg38.ml.fa.gz

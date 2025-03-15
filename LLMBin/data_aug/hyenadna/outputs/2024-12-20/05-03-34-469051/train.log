@@ -1,0 +1,4 @@
+[2024-12-20 05:03:34,877][__main__][INFO] - Instantiating callback <src.callbacks.timer.Timer>
+[2024-12-20 05:03:34,919][__main__][INFO] - Instantiating callback <src.callbacks.params.ParamsLog>
+[2024-12-20 05:03:34,921][__main__][INFO] - Instantiating callback <pytorch_lightning.callbacks.ModelCheckpoint>
+[2024-12-20 05:03:34,922][__main__][INFO] - Instantiating trainer <pytorch_lightning.Trainer>
